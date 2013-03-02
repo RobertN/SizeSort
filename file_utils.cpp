@@ -35,7 +35,7 @@ private:
 size_t retrieveSize(const std::string& filename)
 {
     ScopedFile file;
-    file.open(filename);
+
     if (!file.open(filename)) {
         perror("Could not open file");
         return 0;
@@ -45,6 +45,7 @@ size_t retrieveSize(const std::string& filename)
     long file_size = ftell(file.fd());
     if (file_size == 0L)
         return 0;
+
     return file_size;
 }
 
