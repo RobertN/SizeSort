@@ -1,2 +1,2 @@
 all:
-	g++ main.cpp -o sz
+	g++ main.cpp file_utils.cpp tests.cpp -o sz

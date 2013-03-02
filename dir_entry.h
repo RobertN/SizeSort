@@ -2,6 +2,7 @@
 #define DIR_ENTRY_H
 
 #include <string>
+#include "tree.h"
 
 class DirectoryEntry
 {
@@ -27,5 +28,6 @@ private:
 };
 
 
+typedef TreeNode<DirectoryEntry> FileNode;
 
 #endif // DIR_ENTRY_H
