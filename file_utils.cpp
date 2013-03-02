@@ -2,26 +2,50 @@
 #include <sys/stat.h>
 #include <cstdio>
 #include <string>
+#include "file_utils.h"
 #include "dir_entry.h"
+
+class ScopedFile
+{
+public:
+    ScopedFile() : file(0) {}
+
+    ~ScopedFile()
+    {
+        if (file)
+            fclose(file);
+    }
+
+    bool open(const std::string& filename)
+    {
+        file = fopen(filename.c_str(), "rb");
+        if (!file)
+            return false;
+        return true;
+    }
+
+    FILE* fd() { return file; }
+
+private:
+    FILE* file;
+};
+
+
 
 size_t retrieveSize(const std::string& filename)
 {
-    FILE *file = fopen(filename.c_str(), "rb");
-    if (!file) {
-        std::string error = "Could not open " + filename;
-        fclose(file);
-        perror(error.c_str());
+    ScopedFile file;
+    file.open(filename);
+    if (!file.open(filename)) {
+        perror("Could not open file");
         return 0;
     }
-    fseek(file, 0L, SEEK_END);
-    long file_size = ftell(file);
-    if (file_size == 0L) {
-        fclose(file);
-        return 0;
-    }
-    fclose(file);
-    return file_size;
 
+    fseek(file.fd(), 0L, SEEK_END);
+    long file_size = ftell(file.fd());
+    if (file_size == 0L)
+        return 0;
+    return file_size;
 }
 
 FileNode* createFileTree(const std::string& path)
