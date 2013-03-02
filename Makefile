@@ -1,2 +1,2 @@
 all:
-	g++ main.cpp dir_tree.cpp -o sz
+	g++ main.cpp -o sz
